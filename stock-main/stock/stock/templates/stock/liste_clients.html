@@ -1,0 +1,43 @@
+{% extends "sidebar.html" %}
+
+{% block title %}Liste des clients{% endblock %}
+
+{% block content %}
+<div class="main-content" style="padding: 2rem 2rem; max-width: 800px; margin: 0 auto;">
+    <h2>👥 Liste des clients</h2>
+
+    <div class="actions" style="margin-bottom: 20px;">
+        <a href="{% url 'ajouter_client' %}" class="button">➕ Nouveau client</a>
+    </div>
+
+    <!-- Formulaire de recherche -->
+    <form method="get" class="search-form" style="margin: 20px 0;">
+        <input type="text" name="q" placeholder="🔍 Rechercher un client..." value="{{ query }}" 
+               style="padding: 8px; width: 250px; border-radius: 4px; border: 1px solid #ccc;">
+        <button type="submit" style="padding: 8px 12px; background-color: #007bff; border: none; color: white; border-radius: 4px; cursor: pointer;">
+            Chercher
+        </button>
+    </form>
+
+    <ul class="clients-list" style="list-style: none; padding: 0;">
+        {% for c in clients %}
+        <li style="background: white; margin-bottom: 10px; padding: 12px; border-radius: 8px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.05); display: flex; justify-content: space-between; align-items: center;">
+            <span>{{ c.nom }} – {{ c.telephone }}</span>
+            <span class="client-actions" style="display: flex; align-items: center;">
+                <a href="{% url 'modifier_client' c.id %}" style="margin-left: 10px; font-size: 16px;">✏️</a>
+                <form action="{% url 'supprimer_client' c.id %}" method="post" onsubmit="return confirm('Supprimer {{ c.nom }} ?')" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" style="margin-left: 10px; font-size: 16px;">🗑️</button>
+                </form>
+            </span>
+        </li>
+        {% empty %}
+        <li>Aucun client trouvé.</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'dashboard' %}" class="back-link" style="display: inline-block; margin-top: 30px; color: #555; text-decoration: none;">
+        🏠 Retour au dashboard
+    </a>
+</div>
+{% endblock %}

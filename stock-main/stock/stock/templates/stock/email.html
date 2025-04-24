@@ -1,0 +1,69 @@
+{% extends 'sidebar.html' %}
+{% block content %}
+<div class="content-container">
+  <h2>Envoyer un Email</h2>
+
+  {% if msg %}
+    <div class="alert">{{ msg }}</div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    
+    <div class="form-group">
+      <label>Choisir les destinataires :</label>
+      <select name="recipients_choice" onchange="this.form.submit()" class="form-control">
+        <option value="client" {% if selected_type == 'client' %}selected{% endif %}>Clients</option>
+        <option value="fournisseur" {% if selected_type == 'fournisseur' %}selected{% endif %}>Fournisseurs</option>
+      </select>
+    </div>
+
+    <input type="text" id="searchInput" placeholder="Rechercher..." class="form-control my-2">
+
+    <table class="table table-bordered table-striped" id="recipientsTable">
+      <thead>
+        <tr>
+          <th>Sélectionner</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Info</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for recipient in recipients_data %}
+        <tr>
+          <td><input type="checkbox" name="recipients" value="{{ recipient.id }}"></td>
+          <td>{{ recipient.nom }}</td>
+          <td>{{ recipient.email }}</td>
+          <td>
+            {% if selected_type == 'client' %}
+              {{ recipient.adresse }} | {{ recipient.telephone }}
+            {% else %}
+              {{ recipient.telephone }} | {{ recipient.adresse }}
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    {{ form.subject.label_tag }} {{ form.subject }}
+    {{ form.message.label_tag }} {{ form.message }}
+
+    <button type="submit" class="btn btn-primary mt-3">Envoyer l'Email</button>
+  </form>
+</div>
+
+<script>
+  // Simple search filter
+  document.getElementById('searchInput').addEventListener('keyup', function () {
+    const filter = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#recipientsTable tbody tr');
+
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      row.style.display = text.includes(filter) ? '' : 'none';
+    });
+  });
+</script>
+{% endblock %}

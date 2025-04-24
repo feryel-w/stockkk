@@ -1,0 +1,164 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://cdn.jsdelivr.net/npm/@iconscout/unicons@3.0.6/css/line.css" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/sidebar.css' %}" />
+  <link rel="icon" type="image/png" href="{% static 'app/favicon.ico' %}">
+  <title>{% block title %}Dashboard{% endblock %}</title>
+</head>
+<body id="body-pd">
+  <header class="header" id="header">
+    <div class="header_toggle" id="header-toggle">
+      <i class='uil uil-bars'></i>
+    </div>
+  </header>
+
+  <div class="l-navbar" id="nav-bar">
+    <nav class="nav">
+      <div>
+        <a href="{% url 'dashboard' %}" class="nav_logo">
+          <i class='uil uil-layer-group nav_logo-icon'></i>
+          <span class="nav_logo-name">Gestion Stock</span>
+        </a>
+
+        <div class="nav_list">
+          <!-- DASHBOARD (no dropdown) -->
+          <a href="{% url 'dashboard' %}" class="nav_link">
+            <i class='uil uil-estate nav_icon'></i>
+            <span class="nav_name">Dashboard</span>
+          </a>
+
+          <!-- CATEGORIES -->
+          <div class="nav_section">
+            <a class="nav_link nav_dropdown-toggle">
+              <i class='uil uil-apps nav_icon'></i>
+              <span class="nav_name">Catégories</span>
+              <i class='uil uil-angle-down nav_dropdown-icon'></i>
+            </a>
+            <div class="nav_dropdown">
+              <a href="{% url 'ajouter_categorie' %}" class="nav_link"><i class='uil uil-plus-circle nav_icon'></i><span class="nav_name">Ajouter</span></a>
+              <a href="{% url 'liste_categories' %}" class="nav_link"><i class='uil uil-list-ul nav_icon'></i><span class="nav_name">Lister</span></a>
+            </div>
+          </div>
+
+          <!-- CLIENTS -->
+          <div class="nav_section">
+            <a class="nav_link nav_dropdown-toggle">
+              <i class='uil uil-user nav_icon'></i>
+              <span class="nav_name">Clients</span>
+              <i class='uil uil-angle-down nav_dropdown-icon'></i>
+            </a>
+            <div class="nav_dropdown">
+              <a href="{% url 'ajouter_client' %}" class="nav_link"><i class='uil uil-user-plus nav_icon'></i><span class="nav_name">Ajouter</span></a>
+              <a href="{% url 'liste_clients' %}" class="nav_link"><i class='uil uil-users-alt nav_icon'></i><span class="nav_name">Lister</span></a>
+            </div>
+          </div>
+
+          <!-- FOURNISSEURS -->
+          <div class="nav_section">
+            <a class="nav_link nav_dropdown-toggle">
+              <i class='uil uil-truck nav_icon'></i>
+              <span class="nav_name">Fournisseurs</span>
+              <i class='uil uil-angle-down nav_dropdown-icon'></i>
+            </a>
+            <div class="nav_dropdown">
+              <a href="{% url 'ajouter_fournisseur' %}" class="nav_link"><i class='uil uil-plus nav_icon'></i><span class="nav_name">Ajouter</span></a>
+              <a href="{% url 'liste_fournisseurs' %}" class="nav_link"><i class='uil uil-list-ul nav_icon'></i><span class="nav_name">Lister</span></a>
+            </div>
+          </div>
+
+          <!-- PRODUITS -->
+          <div class="nav_section">
+            <a class="nav_link nav_dropdown-toggle">
+              <i class='uil uil-box nav_icon'></i>
+              <span class="nav_name">Produits</span>
+              <i class='uil uil-angle-down nav_dropdown-icon'></i>
+            </a>
+            <div class="nav_dropdown">
+              <a href="{% url 'ajouter_produit' %}" class="nav_link"><i class='uil uil-plus-circle nav_icon'></i><span class="nav_name">Ajouter</span></a>
+              <a href="{% url 'liste_produits' %}" class="nav_link"><i class='uil uil-list-ul nav_icon'></i><span class="nav_name">Lister</span></a>
+            </div>
+          </div>
+                <!-- MOUVEMENTS -->
+        <div class="nav_section">
+            <a class="nav_link nav_dropdown-toggle">
+            <i class='uil uil-exchange nav_icon'></i>
+            <span class="nav_name">Mouvements</span>
+            <i class='uil uil-angle-down nav_dropdown-icon'></i>
+            </a>
+            <div class="nav_dropdown">
+            <a href="{% url 'ajouter_mouvement' %}" class="nav_link">
+                <i class='uil uil-plus-circle nav_icon'></i>
+                <span class="nav_name">Ajouter</span>
+            </a>
+            <a href="{% url 'liste_mouvements' %}" class="nav_link">
+                <i class='uil uil-list-ul nav_icon'></i>
+                <span class="nav_name">Lister</span>
+            </a>
+            </div>
+        </div>
+        <!-- EMAIL -->
+        <div class="nav_section">
+            <a class="nav_link nav_dropdown-toggle">
+            <i class='uil uil-envelope nav_icon'></i>
+            <span class="nav_name">Emails</span>
+            <i class='uil uil-angle-down nav_dropdown-icon'></i>
+            </a>
+            <div class="nav_dropdown">
+            <a href="{% url 'envoyer_email' %}" class="nav_link">
+                <i class='uil uil-send nav_icon'></i>
+                <span class="nav_name">Envoyer un Email</span>
+            </a>
+            </div>
+        </div>
+        
+        
+
+          <!-- LOGOUT -->
+          <form method="post" action="{% url 'logout' %}" style="margin-top: 2rem;">
+            {% csrf_token %}
+            <button type="submit" class="nav_link" style="background: none; border: none; cursor: pointer;">
+              <i class='uil uil-sign-out-alt nav_icon'></i>
+              <span class="nav_name">Se déconnecter</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <main style="padding: 1rem;">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script>
+    const toggleBtn = document.getElementById("header-toggle");
+    const nav = document.getElementById("nav-bar");
+    const bodyPd = document.getElementById("body-pd");
+    const header = document.getElementById("header");
+
+    toggleBtn.addEventListener("click", () => {
+      nav.classList.toggle("show");
+      bodyPd.classList.toggle("body-pd");
+      header.classList.toggle("body-pd");
+
+      toggleBtn.innerHTML = nav.classList.contains("show")
+        ? "<i class='uil uil-times'></i>"
+        : "<i class='uil uil-bars'></i>";
+    });
+
+    document.querySelectorAll(".nav_dropdown-toggle").forEach(toggle => {
+      toggle.addEventListener("click", () => {
+        const dropdown = toggle.nextElementSibling;
+        const icon = toggle.querySelector(".nav_dropdown-icon");
+
+        dropdown.classList.toggle("show");
+        icon.classList.toggle("rotate");
+      });
+    });
+  </script>
+</body>
+</html>

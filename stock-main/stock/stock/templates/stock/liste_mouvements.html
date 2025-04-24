@@ -1,0 +1,78 @@
+{% extends 'sidebar.html' %}
+{% load static %}
+
+{% block title %}Liste Mouvements{% endblock %}
+
+{% block content %}
+<div style="
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    max-width: 900px;
+    margin: 2rem auto;
+">
+  <h2 style="color: #a31144; text-align: center; margin-bottom: 1.5rem;">Liste des mouvements de stock</h2>
+
+  <!-- Search Bar -->
+  <form method="get" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+    <input 
+      type="text" 
+      name="q" 
+      placeholder="Rechercher..." 
+      value="{{ query }}" 
+      style="
+        flex-grow: 1;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+      "
+    >
+    <button type="submit" style="
+      background: linear-gradient(to right, #ff6a00, #ee0979);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    ">
+      Chercher
+    </button>
+  </form>
+
+  <!-- Ajouter Mouvement -->
+  <div style="text-align: right; margin-bottom: 1rem;">
+    <a href="{% url 'ajouter_mouvement' %}" style="
+      background: linear-gradient(to right, #0f0c29, #302b63);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+    ">
+      + Ajouter un mouvement
+    </a>
+  </div>
+
+  <!-- Mouvements List -->
+  <ul style="list-style: none; padding: 0;">
+    {% for m in mouvements %}
+      <li style="
+        padding: 1rem;
+        border: 1px solid #eee;
+        margin-bottom: 0.75rem;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+      ">
+        <strong>{{ m.date_mouvement|date:"Y-m-d H:i" }}</strong> : 
+        {{ m.type_mouvement }} - 
+        <strong>{{ m.produit.nom }}</strong> 
+        (Quantité : {{ m.quantite }})
+      </li>
+    {% empty %}
+      <li style="text-align: center; color: #999;">Aucun mouvement trouvé.</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Caisse{% endblock %}
+
+{% block content %}
+  <div class="caisse">
+    <h2>Résumé Financier</h2>
+
+    <!-- Revenus Totaux -->
+    <div class="stat-box">
+      <h3>Revenus Totaux</h3>
+      <p>{{ revenus_totaux }}</p>
+    </div>
+
+    <!-- Total Gain and Total Expense -->
+    <div class="stat-box">
+      <h3>Total Gain</h3>
+      <p>{{ total_gain }}</p>
+    </div>
+    <div class="stat-box">
+      <h3>Total Dépense</h3>
+      <p>{{ total_depense }}</p>
+    </div>
+
+    <!-- Solde (Balance) -->
+    <div class="stat-box">
+      <h3>Solde</h3>
+      <p>{{ solde }}</p>
+    </div>
+  </div>
+{% endblock %}

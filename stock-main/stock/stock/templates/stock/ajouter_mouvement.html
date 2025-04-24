@@ -1,0 +1,41 @@
+{% extends 'sidebar.html' %}
+{% load static %}
+
+{% block title %}Ajouter Mouvement{% endblock %}
+
+{% block content %}
+<div style="
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin: 2rem auto;
+">
+  <h2 style="color: #a31144; text-align: center; margin-bottom: 2rem;">Ajouter un mouvement de stock</h2>
+
+  <form method="post" style="display: flex; flex-direction: column; gap: 1rem;">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" style="
+      background: linear-gradient(to right, #ff6a00, #ee0979);
+      color: white;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s ease;
+    " onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
+      Enregistrer
+    </button>
+  </form>
+
+  <div style="margin-top: 1rem; text-align: center;">
+    <a href="{% url 'liste_mouvements' %}" style="color: #302b63; text-decoration: underline;">
+      ← Retour à la liste
+    </a>
+  </div>
+</div>
+{% endblock %}

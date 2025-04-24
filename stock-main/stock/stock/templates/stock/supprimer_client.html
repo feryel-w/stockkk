@@ -1,0 +1,7 @@
+<h2>Supprimer client ?</h2>
+<p>Voulez-vous vraiment supprimer : <strong>{{ client.nom }}</strong> ?</p>
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Oui, supprimer</button>
+  <a href="{% url 'liste_clients' %}">Annuler</a>
+</form>

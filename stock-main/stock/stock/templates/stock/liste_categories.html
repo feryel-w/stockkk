@@ -1,0 +1,36 @@
+{% extends 'sidebar.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/categories.css' %}">
+<div class="category-container">
+    <div class="category-header">
+        <h2>📂 Liste des catégories</h2>
+        <a href="{% url 'ajouter_categorie' %}" class="btn add-btn">➕ Nouvelle catégorie</a>
+    </div>
+
+    <form method="get" class="search-form">
+        <input type="text" name="q" placeholder="🔍 Rechercher..." value="{{ query }}">
+        <button type="submit" class="btn search-btn">Chercher</button>
+    </form>
+
+    <ul class="category-list">
+        {% for c in categories %}
+        <li class="category-item">
+            <span>{{ c.nom }}</span>
+            <div class="actions">
+                <a href="{% url 'modifier_categorie' c.id %}" title="Modifier" class="icon-btn edit-btn">✏️</a>
+                <form action="{% url 'supprimer_categorie' c.id %}" method="post" onsubmit="return confirm('Supprimer {{ c.nom }} ?')">
+                    {% csrf_token %}
+                    <button type="submit" title="Supprimer" class="icon-btn delete-btn">🗑️</button>
+                </form>
+            </div>
+        </li>
+        {% empty %}
+            <li class="empty">Rien à afficher</li>
+        {% endfor %}
+    </ul>
+
+    <a href="{% url 'dashboard' %}" class="back-link">🏠 Retour au Dashboard</a>
+</div>
+{% endblock %}

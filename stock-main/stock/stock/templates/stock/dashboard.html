@@ -1,0 +1,187 @@
+{% extends 'sidebar.html' %}
+{% load static %}
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+
+<div class="dashboard-container">
+    <!-- Big Stats Boxes -->
+    <div class="stats-boxes">
+        <div class="big-box">
+            <h4>Total Movements</h4>
+            <p class="big-number">{{ total_movements }}</p>
+        </div>
+        <div class="big-box">
+            <h4>Total Revenue</h4>
+            <p class="big-number">{{ total_revenue }} TND</p>
+        </div>
+        <div class="big-box">
+            <h4>Total Expenses</h4>
+            <p class="big-number">{{ total_expenses }} TND</p>
+        </div>
+        <div class="big-box">
+            <h4>Balance</h4>
+            <p class="big-number">{{ total_balance }} TND</p>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <h3>Stock Insights</h3>
+    <div class="chart-pair">
+        <div class="chart-box">
+            <canvas id="revenueExpenseChart"></canvas>
+        </div>
+        <div class="chart-box">
+            <canvas id="movementTypeChart"></canvas>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const totalRevenue = {{ total_revenue|default:0 }};
+        const totalExpenses = {{ total_expenses|default:0 }};
+        const entreeCount = {{ total_entree_count|default:0 }};
+        const sortieCount = {{ total_sortie_count|default:0 }};
+
+        const revenueCtx = document.getElementById('revenueExpenseChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Revenue', 'Expenses'],
+                datasets: [{
+                    label: 'TND',
+                    data: [totalRevenue, totalExpenses],
+                    backgroundColor: ['#4fd1c5', '#f56565'],
+                    borderColor: ['#319795', '#c53030'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { callback: value => value + ' TND' }
+                    }
+                }
+            }
+        });
+
+        const movementCtx = document.getElementById('movementTypeChart').getContext('2d');
+        new Chart(movementCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Entrées', 'Sorties'],
+                datasets: [{
+                    label: 'Mouvements',
+                    data: [entreeCount, sortieCount],
+                    backgroundColor: ['#68d391', '#f6ad55'],
+                    borderColor: ['#38a169', '#dd6b20'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <!-- Top Sold Products -->
+    <h3>Top Sold Products</h3>
+    <div class="top-sold-products">
+        {% if top_sold_products %}
+            <ul>
+                {% for product in top_sold_products %}
+                    <li><strong>{{ product.produit }}</strong>: {{ product.total_quantity }} sold</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun produit vendu.</p>
+        {% endif %}
+    </div>
+
+    <!-- Recent Stock Movements -->
+    <h3>Recent Stock Movements</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Revenue</th>
+                <th>Expense</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for movement in recent_movements %}
+                <tr>
+                    <td>{{ movement.date_mouvement }}</td>
+                    <td>{{ movement.type_mouvement }}</td>
+                    <td>{{ movement.produit }}</td>
+                    <td>{{ movement.quantite }}</td>
+                    <td>{{ movement.gain }} TND</td>
+                    <td>{{ movement.depense }} TND</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <!-- Low Stock Alert -->
+    {% if low_stock_products %}
+        <div class="alert alert-warning" role="alert">
+            Attention! Certains produits ont un stock faible.
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Stock Level</th>
+                    <th>Categorie</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for product in low_stock_products %}
+                    <tr>
+                        <td>
+                            <strong>{{ product.nom }}</strong>
+                            {% if product.quantite_stock <= product.reorder_threshold %}
+                                <span style="color: red; font-weight: bold;">&#9888; Low Stock</span> <!-- Red warning icon -->
+                            {% endif %}
+                        </td>
+                        <td>{{ product.quantite_stock }}</td>
+                        <td>{{ product.categorie }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No products are low on stock.</p>
+    {% endif %}
+</div>
+
+<style>
+.chart-pair {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+.chart-box {
+    width: 100%;
+    max-width: 350px;
+    height: 250px;
+}
+</style>
+
+{% endblock %}
